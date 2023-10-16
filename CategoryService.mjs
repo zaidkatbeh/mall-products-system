@@ -2,16 +2,16 @@ import { Category } from "./Category.mjs";
 
 export class CategoryService {
     categories = [];
+ feature/PMS-4-addCategory
+    // this function is already made from the last branch due to the need of it 
+    searchBy(column,input) {
+        let result = -1;
+         this.categories.find((category) => {
+            if (category[column] == input) {
+                result = category;
+                return;
     getAll() {
         return this.categories;
-    }
-    // this function is already made from the last branch due to the need of it 
-    getByName(name) {
-        return this.categories.find((category) => {
-            if (category.name == name) {
-                return category;
-            }
-        });
     }
     getLastID() {
         let maxID = 1;
@@ -27,7 +27,7 @@ export class CategoryService {
         if (typeof name != "string") {
             return -1;
         }
-        if (this.getByName(name)) {
+        if (this.searchBy("name",name) != -1) {
             console.log("there is already a category with this name");
             return -1;
         }
