@@ -1,7 +1,11 @@
 import { Category } from "./Category.mjs";
 
-class CategoryService {
+export class CategoryService {
     categories = [];
+    getAll() {
+        return this.categories;
+    }
+    // this function is already made from the last branch due to the need of it 
     getByName(name) {
         return this.categories.find((category) => {
             if (category.name == name) {
