@@ -42,11 +42,18 @@ export class CategoryService {
         }
         let category = this.searchBy("id",id);
         if(category == -1) {
+            console.log("category not found");
             return -1;
         }
         return (this.categories.splice(category.index, 1)) ? 1 : -1
     }
-    // edit(id,newName) {
-    //     if
-    // }
+    edit(id,newName) {
+        let CategoryIndex = this.searchBy("id",id);
+        if(CategoryIndex == -1) {
+            console.log("category not found");
+            return -1;
+        }
+         this.categories[CategoryIndex.index].name = newName;
+         return 1;
+    }
 }
