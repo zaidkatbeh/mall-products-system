@@ -10,8 +10,8 @@ export class CategoryService {
                 result = {"category":category,"index":currentIndex};
                 return;
             }
-        return result;
         })
+        return result;
     }
     getAll() {
         return this.categories;
