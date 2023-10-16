@@ -40,4 +40,16 @@ export class SubcategoryService {
         this.subcategories.push(new Subcategory(this.getLastID() + 1, categoryID, name));
         return 1;
     }
+    delete(id) {
+        if (typeof id != "number" || id < 1) {
+            return -1;
+        }
+        let subcategory = this.searchBy("id", id);
+        if(subcategory == -1) {
+            console.log("subcategory not found");
+            return -1;
+        }
+        this.subcategories.splice(subcategory.index, 1);
+        return 1;
+    }
 }
