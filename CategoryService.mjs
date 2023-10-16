@@ -5,11 +5,13 @@ export class CategoryService {
     // this function is already made from the last branch due to the need of it 
     searchBy(column,input) {
         let result = -1;
-         this.categories.find((category) => {
+         this.categories.find((category,currentIndex) => {
             if (category[column] == input) {
-                result = category;
+                result = {"category":category,"index":currentIndex};
                 return;
             }
+        });
+        return result;
         })
         return result
     }
