@@ -4,7 +4,7 @@ class CategoryService {
     categories = [];
     getByName(name) {
         return this.categories.find((category) => {
-            if(category.name == name) {
+            if (category.name == name) {
                 return category;
             }
         });
@@ -12,7 +12,7 @@ class CategoryService {
     getLastID() {
         let maxID = 1;
         this.categories.map((category) => {
-            if(category.id > maxID) {
+            if (category.id > maxID) {
                 maxID = category.id
             }
         });
@@ -20,10 +20,10 @@ class CategoryService {
 
     }
     add(name) {
-        if(typeof name != "string" ) {
+        if (typeof name != "string") {
             return -1;
         }
-        if(this.getByName(name)) {
+        if (this.getByName(name)) {
             console.log("there is already a category with this name");
             return -1;
         }
