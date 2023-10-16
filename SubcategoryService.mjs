@@ -26,6 +26,9 @@ export class SubcategoryService {
         return result;
     }
     add(categoryID, name) {
+        if(typeof categoryID != "number" || typeof name != "string") {
+            return -1;
+        }
         let alreadyExist = false;
         this.subcategories.map((subcategory) => {
             if (subcategory.name == name && subcategory.categoryID == categoryID) {
