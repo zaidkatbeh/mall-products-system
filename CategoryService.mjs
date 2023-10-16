@@ -12,6 +12,8 @@ export class CategoryService {
             }
         });
         return result;
+        })
+        return result
     }
     getAll() {
         return this.categories;
