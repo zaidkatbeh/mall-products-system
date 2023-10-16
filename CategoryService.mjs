@@ -36,4 +36,24 @@ export class CategoryService {
         }
         return this.categories.push(new Category(this.getLastID() + 1, name));
     }
+    delete(id) {
+        if(typeof id != "number" || id < 1) {
+            return -1;
+        }
+        let category = this.searchBy("id",id);
+        if(category == -1) {
+            console.log("category not found");
+            return -1;
+        }
+        return (this.categories.splice(category.index, 1)) ? 1 : -1
+    }
+    edit(id,newName) {
+        let CategoryIndex = this.searchBy("id",id);
+        if(CategoryIndex == -1) {
+            console.log("category not found");
+            return -1;
+        }
+         this.categories[CategoryIndex.index].name = newName;
+         return 1;
+    }
 }
