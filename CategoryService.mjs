@@ -2,15 +2,16 @@ import { Category } from "./Category.mjs";
 
 export class CategoryService {
     categories = [];
+ feature/PMS-4-addCategory
+    // this function is already made from the last branch due to the need of it 
     searchBy(column,input) {
         let result = -1;
          this.categories.find((category) => {
             if (category[column] == input) {
                 result = category;
                 return;
-            }
-        });
-        return result;
+    getAll() {
+        return this.categories;
     }
     getLastID() {
         let maxID = 1;
