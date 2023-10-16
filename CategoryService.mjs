@@ -27,6 +27,6 @@ class CategoryService {
             console.log("there is already a category with this name");
             return -1;
         }
-        return this.categories.push(new Category(this.getLastID(), name));
+        return this.categories.push(new Category(this.getLastID() + 1, name));
     }
 }
