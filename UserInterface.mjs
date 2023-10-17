@@ -3,7 +3,7 @@ import readline from "readline";
 import { CategoryService } from "./CategoryService.mjs"
 
 class UserInterface {
-    readl
+    readl;
     constructor() {
         this.readl = readline.createInterface({
             input: process.stdin,
@@ -46,7 +46,7 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("MPMS--->manage categories");
         console.log("-".repeat(60));
-        this.printOptions(" get all", "search by", "add new", "edit", "delete", "go back");
+        this.printOptions("get all", "search by", "add new", "go back");
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
@@ -59,15 +59,9 @@ class UserInterface {
                     this.addCategory();
                     break;
                 case "4":
-                    console.log("edit");
-                    break;
-                case "5":
-                    console.log("delete");
-                    break;
-                case "6":
                     this.mainUI();
                     break;
-                case "7":
+                case "5":
                     console.log("app closed");
                     this.readl.close();
                     break;
@@ -228,11 +222,28 @@ class UserInterface {
             });
         }
         console.log("-".repeat(30));
-        this.readl.question("to go back enter anything",(answer) => {
-            this.manageCategories();
+        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ",answer => {
+            if(answer == "back") {
+                this.manageCategories();
+            } else {
+                let categoryIndex = -1;
+                categories.map((category,currentIndex) => {
+                    if(category.id == answer) {
+                        categoryIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (categoryIndex == -1){
+                    console.log("category not found");
+                    setTimeout(() => {
+                        this.getAllCategories();
+                    },1000)
+                } else {
+                    this.modifyCategory(categoryIndex);
+                }
+            }
         });
     }
-
     searchForCategory() {
         console.clear();
         console.log("-".repeat(60));
@@ -251,8 +262,44 @@ class UserInterface {
             }
         })
     }
+    modifyCategory(categoryIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage categories--->get all-->modify category");
+        console.log("-".repeat(60));
+        let category = CategoryService.categories[categoryIndex];
+        console.log(`category name : ${category.name}`);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ",modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the new name : ",answer => {
+                    if(typeof answer === "string" && answer != "") {
+                        let result = CategoryService.edit(category.id, answer);
+                        console.log(result == -1 ? "edit failed" : "edit successeded");
+                        setTimeout(() => {
+                            this.getAllCategories();
+                        },1000)
+                    } else {
+                        console.log("please enter a valid name");
+                        setTimeout(() => {
+                            this.modifyCategory(categoryIndex);
+                        },1000)
+                    }
+                });
+            } else if (modifyType == 2) {
+               let result = CategoryService.delete(category.id);
+               if (result == -1) {
+                console.log("delete failed");
+               } else {
+                console.log("delete successeded");
+               }
+               setTimeout(() => {
+                this.manageCategories();
+            },1000);
+        }
+        });
 
 
+    }
 }
 let userInterface = new UserInterface();
 userInterface.mainUI();
