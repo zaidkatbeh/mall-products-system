@@ -53,8 +53,19 @@ export class CategoryService {
             console.log("category not found");
             return -1;
         }
-         this.categories[CategoryIndex.index].name = newName;
-         return 1;
+        let isNameUsed = -1;
+        this.categories.map((category) => {
+            if(category.id != id && category.name == newName) {
+                isNameUsed = 1;
+            }
+        });
+        if(isNameUsed == -1) {
+            this.categories[CategoryIndex.index].name = newName;
+            return 1;
+        } else {
+            console.log("name already used");
+            return -1;
+        }
     }
     static getSubcategories(id) {
         if (typeof id != "number") {
