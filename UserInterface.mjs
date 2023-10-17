@@ -1,17 +1,20 @@
 import readline from "readline";
-const readl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
 
 class UserInterface {
+     readl
+     constructor() {
+        this.readl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+          });
+     }
      mainUI() {
         console.clear();
         console.log("-".repeat(60));
         console.log("Welcome to mall products manegment system (MPMS)");
         console.log("-".repeat(60));
         this.printOptions("Manage Categories","Manage Subcategories","Manage Products","Manage Offers")
-        readl.question("enter the number of the procces you want to do? ",  (answer) => {
+        this.readl.question("enter the number of the procces you want to do? ",  (answer) => {
             switch(answer) {
                 case "1" :
                     this.manageCategories();
@@ -27,7 +30,7 @@ class UserInterface {
                     break;
                 case "5" :
                     console.log("app is closed");
-                    readl.close();
+                    this.readl.close();
                     break;
                 default :
                 console.log("please enter a valid number");
@@ -36,20 +39,13 @@ class UserInterface {
         });
     }
 
-    printOptions(...options) {
-        options.forEach((option,currentIndex) => {
-            console.log(`${currentIndex + 1} - ${option}.`);
-        });
-        console.log(`${options.length + 1} - close the App`);
-    } 
-
     manageCategories() {
         console.clear();
         console.log("-".repeat(60));
         console.log("MPMS--->manage categories");
         console.log("-".repeat(60));
         this.printOptions(" get all","search by","add new","edit","delete","go back");
-                readl.question("enter the number of the procces you want to do? ",  (answer) => {
+                this.readl.question("enter the number of the procces you want to do? ",  (answer) => {
                     switch(answer) {
                         case "1" :
                             console.log("get all");
@@ -71,7 +67,7 @@ class UserInterface {
                             break;
                         case "7" :
                             console.log("app closed");
-                            readl.close();
+                            this.readl.close();
                             break;
                         default :
                         console.log("please enter a valid number");
@@ -86,7 +82,7 @@ class UserInterface {
         console.log("MPMS--->manage subcategories");
         console.log("-".repeat(60));
         this.printOptions(" get all","search by","add new","edit","delete","go back");
-                readl.question("enter the number of the procces you want to do? ",  (answer) => {
+                this.readl.question("enter the number of the procces you want to do? ",  (answer) => {
                     switch(answer) {
                         case "1" :
                             console.log("get all");
@@ -108,7 +104,7 @@ class UserInterface {
                             break;
                         case "7" :
                             console.log("app closed");
-                            readl.close();
+                            this.readl.close();
                             break;
                         default :
                         console.log("please enter a valid number");
@@ -123,7 +119,7 @@ class UserInterface {
         console.log("MPMS--->manage products");
         console.log("-".repeat(60));
         this.printOptions(" get all","search by","add new","edit","delete","go back");
-                readl.question("enter the number of the procces you want to do? ",  (answer) => {
+                this.readl.question("enter the number of the procces you want to do? ",  (answer) => {
                     switch(answer) {
                         case "1" :
                             console.log("get all");
@@ -145,7 +141,7 @@ class UserInterface {
                             break;
                         case "7" :
                             console.log("app closed");
-                            readl.close();
+                            this.readl.close();
                             break;
                         default :
                         console.log("please enter a valid number");
@@ -160,7 +156,7 @@ class UserInterface {
         console.log("MPMS--->manage offers");
         console.log("-".repeat(60));
         this.printOptions(" get all","search by","add new","edit","delete","go back");
-                readl.question("enter the number of the procces you want to do? ",  (answer) => {
+                this.readl.question("enter the number of the procces you want to do? ",  (answer) => {
                     switch(answer) {
                         case "1" :
                             console.log("get all");
@@ -182,7 +178,7 @@ class UserInterface {
                             break;
                         case "7" :
                             console.log("app closed");
-                            readl.close();
+                            this.readl.close();
                             break;
                         default :
                         console.log("please enter a valid number");
@@ -191,6 +187,12 @@ class UserInterface {
             })
     }
 
+    printOptions(...options) {
+        options.forEach((option,currentIndex) => {
+            console.log(`${currentIndex + 1} - ${option}.`);
+        });
+        console.log(`${options.length + 1} - close the App`);
+    } 
 }
 let userInterface = new UserInterface();
 userInterface.mainUI();
