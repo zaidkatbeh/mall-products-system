@@ -1,9 +1,9 @@
 import { Category } from "./Category.mjs";
 
 export class CategoryService {
-    categories = [];
+   static categories = [];
     // this function is already made from the last branch due to the need of it 
-    searchBy(column,input) {
+   static searchBy(column,input) {
         let result = -1;
          this.categories.find((category,currentIndex) => {
             if (category[column] == input) {
@@ -13,10 +13,10 @@ export class CategoryService {
         })
         return result;
     }
-    getAll() {
+    static getAll() {
         return this.categories;
     }
-    getLastID() {
+    static getLastID() {
         let maxID = 1;
         this.categories.map((category) => {
             if (category.id > maxID) {
@@ -26,7 +26,7 @@ export class CategoryService {
         return maxID;
 
     }
-    add(name) {
+    static add(name) {
         if (typeof name != "string") {
             return -1;
         }
@@ -36,7 +36,7 @@ export class CategoryService {
         }
         return this.categories.push(new Category(this.getLastID() + 1, name));
     }
-    delete(id) {
+    static delete(id) {
         if(typeof id != "number" || id < 1) {
             return -1;
         }
@@ -47,7 +47,7 @@ export class CategoryService {
         }
         return (this.categories.splice(category.index, 1)) ? 1 : -1
     }
-    edit(id,newName) {
+    static edit(id,newName) {
         let CategoryIndex = this.searchBy("id",id);
         if(CategoryIndex == -1) {
             console.log("category not found");
