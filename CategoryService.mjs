@@ -56,4 +56,23 @@ export class CategoryService {
          this.categories[CategoryIndex.index].name = newName;
          return 1;
     }
+    static getSubcategories(id) {
+        if (typeof id != "number") {
+            return -1;
+        }
+        let categoryIndex = -1;
+        this.categories.map((category,currentIndex) => {
+            if (category.id == id) {
+                categoryIndex = currentIndex;
+                return;
+            }
+        })
+        console.log(categoryIndex);
+        if(categoryIndex == -1) {
+            console.log("category not found");
+            return -1;
+        }
+        console.log(this.categories[categoryIndex]);
+        return this.categories[categoryIndex].subcategories();
+    }
 }
