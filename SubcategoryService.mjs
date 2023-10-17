@@ -1,11 +1,11 @@
 import { Subcategory } from "./Subcategory.mjs";
 
 export class SubcategoryService {
-    subcategories = [];
-    getAll() {
+    static subcategories = [];
+    static getAll() {
         return this.subcategories;
     }
-    getLastID() {
+    static getLastID() {
         let maxID = 1;
         this.subcategories.map((subcategory) => {
             if (subcategory.id > maxID) {
@@ -15,7 +15,7 @@ export class SubcategoryService {
         return maxID;
 
     }
-    searchBy(column, input) {
+    static searchBy(column, input) {
         let result = -1;
         this.subcategories.find((subcategory, currentIndex) => {
             if (subcategory[column] == input) {
@@ -25,7 +25,7 @@ export class SubcategoryService {
         })
         return result;
     }
-    add(categoryID, name) {
+    static add(categoryID, name) {
         if(typeof categoryID != "number" || typeof name != "string") {
             return -1;
         }
@@ -43,7 +43,7 @@ export class SubcategoryService {
         this.subcategories.push(new Subcategory(this.getLastID() + 1, categoryID, name));
         return 1;
     }
-    delete(id) {
+    static delete(id) {
         if (typeof id != "number" || id < 1) {
             return -1;
         }
@@ -55,7 +55,7 @@ export class SubcategoryService {
         this.subcategories.splice(subcategory.index, 1);
         return 1;
     }
-    edit(id,newName) {
+    static edit(id,newName) {
         if (typeof id != "number" || id < 1 || typeof newName != "string") {
             return -1;
         }
