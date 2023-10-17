@@ -204,10 +204,10 @@ class UserInterface {
         console.log("-".repeat(60));
         this.readl.question("enter the name of the category you want to add : ", (answer) => {
             let addingResult = CategoryService.add(answer);
-            console.log(addingResult == -1 ? "adding failed" :"category has been added"  );
+            console.log(addingResult == -1 ? "adding failed" : "category has been added");
             setTimeout(() => {
                 this.manageCategories();
-            },1000)
+            }, 1000)
         })
     }
 
@@ -217,17 +217,22 @@ class UserInterface {
         console.log("MPMS--->manage categories--->get all");
         console.log("-".repeat(60));
         let categories = CategoryService.getAll();
-        if(categories[0] == null) {
+        if (categories[0] == null) {
             console.log("there is no categories, add some");
         }
         else {
-            console.log("id"+(" ".repeat(10))+"name");
+            console.log("id" + (" ".repeat(10)) + "name");
             console.log("-".repeat(16));
             categories.forEach(category => {
-                let space = 12 - (""+category.id).length;
+                let space = 12 - ("" + category.id).length;
                 console.log(`${category.id}${" ".repeat(space)}${category.name}`);
             });
         }
+        console.log("-".repeat(30));
+        this.readl.question("to go back enter anything",(answer) => {
+            this.manageCategories();
+        });
+
     }
 
 }
