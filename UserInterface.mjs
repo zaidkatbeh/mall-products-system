@@ -1,7 +1,6 @@
 import readline from "readline";
 
 import { CategoryService } from "./CategoryService.mjs"
-import { log } from "console";
 
 class UserInterface {
     readl
@@ -54,7 +53,7 @@ class UserInterface {
                     this.getAllCategories();
                     break;
                 case "2":
-                    console.log("search by");
+                    this.searchForCategory();
                     break;
                 case "3":
                     this.addCategory();
@@ -232,8 +231,27 @@ class UserInterface {
         this.readl.question("to go back enter anything",(answer) => {
             this.manageCategories();
         });
-
     }
+
+    searchForCategory() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage categories--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the name or the id for the category you want to search for : ", (answer) => {
+            let searchResult = CategoryService.searchBy("name", answer);
+            if (searchResult == -1) {
+                searchResult = CategoryService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("Category id : " + searchResult.category.id);
+                console.log("Category name : " + searchResult.category.name);
+            }
+        })
+    }
+
 
 }
 let userInterface = new UserInterface();
