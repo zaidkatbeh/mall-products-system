@@ -17,7 +17,7 @@ class UserInterface {
                     this.manageCategories();
                     break;
                 case "2" :
-                    console.log("edit subcategory");
+                    this.manageSubcategories();
                     break;
                 case "3" :
                     console.log("edit products");
@@ -36,13 +36,13 @@ class UserInterface {
         });
     }
 
-
     printOptions(...options) {
         options.forEach((option,currentIndex) => {
             console.log(`${currentIndex + 1} - ${option}.`);
         });
         console.log(`${options.length + 1} - close the App`);
     } 
+
     manageCategories() {
         console.clear();
         console.log("-".repeat(60));
@@ -78,7 +78,44 @@ class UserInterface {
                         this.manageCategories();
                     }
             })
-    } 
+    }
+    
+    manageSubcategories() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories");
+        console.log("-".repeat(60));
+        this.printOptions(" get all","search by","add new","edit","delete","go back");
+                readl.question("enter the number of the procces you want to do? ",  (answer) => {
+                    switch(answer) {
+                        case "1" :
+                            console.log("get all");
+                            break;
+                        case "2" :
+                            console.log("search by");
+                            break;
+                        case "3" :
+                            console.log("add new ");
+                            break;
+                        case "4" :
+                            console.log("edit");
+                            break;
+                        case "5" :
+                            console.log("delete");
+                            break;
+                        case "6" :
+                            this.mainUI();
+                            break;
+                        case "7" :
+                            console.log("app closed");
+                            readl.close();
+                            break;
+                        default :
+                        console.log("please enter a valid number");
+                        this.manageCategories();
+                    }
+            })
+    }
 }
 let userInterface = new UserInterface();
 userInterface.mainUI();
