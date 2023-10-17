@@ -1,3 +1,4 @@
+import { CategoryService } from "./CategoryService.mjs";
 import { Subcategory } from "./Subcategory.mjs";
 
 export class SubcategoryService {
@@ -27,6 +28,10 @@ export class SubcategoryService {
     }
     static add(categoryID, name) {
         if(typeof categoryID != "number" || typeof name != "string") {
+            return -1;
+        }
+        if (CategoryService.searchBy("id",categoryID) == -1) {
+            console.log("there is no category with this id");
             return -1;
         }
         let alreadyExist = false;
