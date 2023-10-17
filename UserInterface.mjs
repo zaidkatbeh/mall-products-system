@@ -51,7 +51,7 @@ class UserInterface {
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    this.getAllCategories();
                     break;
                 case "2":
                     console.log("search by");
@@ -209,8 +209,27 @@ class UserInterface {
                 this.manageCategories();
             },1000)
         })
-
     }
+
+    getAllCategories() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage categories--->get all");
+        console.log("-".repeat(60));
+        let categories = CategoryService.getAll();
+        if(categories[0] == null) {
+            console.log("there is no categories, add some");
+        }
+        else {
+            console.log("id"+(" ".repeat(10))+"name");
+            console.log("-".repeat(16));
+            categories.forEach(category => {
+                let space = 12 - (""+category.id).length;
+                console.log(`${category.id}${" ".repeat(space)}${category.name}`);
+            });
+        }
+    }
+
 }
 let userInterface = new UserInterface();
 userInterface.mainUI();
