@@ -82,7 +82,7 @@ class UserInterface {
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    this.getallSubcategories();
                     break;
                 case "2":
                     console.log("search by");
@@ -312,6 +312,30 @@ class UserInterface {
                         this.manageSubcategories();
                     },1000)
             });
+        });
+    }
+    getallSubcategories() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->get all");
+        console.log("-".repeat(60));
+        let Subcategories = SubcategoryService.getAll();
+        if (Subcategories[0] == null) {
+            console.log("there is no subcategories, add some");
+        }
+        else {
+            console.log("id" + (" ".repeat(10)) + "name");
+            console.log("-".repeat(16));
+            Subcategories.forEach(Subcategories => {
+                let space = 12 - ("" + Subcategories.id).length;
+                console.log(`${Subcategories.id}${" ".repeat(space)}${Subcategories.name}`);
+            });
+        }
+        console.log("-".repeat(30));
+        this.readl.question("to go back enter <back>",(answer) => {
+            if (answer == "back") {
+                this.manageSubcategories();
+            }
         });
     }
 }
