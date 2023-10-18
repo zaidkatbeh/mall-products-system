@@ -1,6 +1,7 @@
 import readline from "readline";
 
 import { CategoryService } from "./CategoryService.mjs"
+import { SubcategoryService } from "./SubcategoryService.mjs";
 
 class UserInterface {
     readl;
@@ -77,7 +78,7 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("MPMS--->manage subcategories");
         console.log("-".repeat(60));
-        this.printOptions(" get all", "search by", "add new", "edit", "delete", "go back");
+        this.printOptions("get all", "search by", "add new", "go back");
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
@@ -87,7 +88,7 @@ class UserInterface {
                     console.log("search by");
                     break;
                 case "3":
-                    console.log("add new ");
+                    this.addSubcategory();
                     break;
                 case "4":
                     console.log("edit");
@@ -297,8 +298,21 @@ class UserInterface {
             },1000);
         }
         });
+    }
 
-
+    addSubcategory() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->add new");
+        console.log("-".repeat(60));
+        this.readl.question("enter the category id : ", categoryID => {
+            this.readl.question("enter the subcategory name : ",subcategoryName => {
+                console.log(SubcategoryService.add(categoryID,subcategoryName) == -1 ? "adding a subcategory failed" : "subcategory has been added");
+                    setTimeout(() => {
+                        this.manageSubcategories();
+                    },1000)
+            });
+        });
     }
 }
 let userInterface = new UserInterface();
