@@ -324,17 +324,33 @@ class UserInterface {
             console.log("there is no subcategories, add some");
         }
         else {
-            console.log("id" + (" ".repeat(10)) + "name");
-            console.log("-".repeat(16));
-            Subcategories.forEach(Subcategories => {
-                let space = 12 - ("" + Subcategories.id).length;
-                console.log(`${Subcategories.id}${" ".repeat(space)}${Subcategories.name}`);
+            console.log("id" + (" ".repeat(5))  + "categoryID" + (" ".repeat(5)) + "name");
+            console.log("-".repeat(26));
+            Subcategories.forEach(Subcategory => {
+                let space = 22 - ("" + Subcategory.id).length;
+                console.log(`${Subcategory.id}${" ".repeat(space / 2)}${Subcategory.categoryID}${" ".repeat(space / 2)}${Subcategory.name}`);
             });
         }
         console.log("-".repeat(30));
-        this.readl.question("to go back enter <back>",(answer) => {
+        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ",answer => {
             if (answer == "back") {
                 this.manageSubcategories();
+            } else {
+                let subcategoryIndex = -1;
+                Subcategories.map((subcategory,currentIndex) => {
+                    if(subcategory.id == answer) {
+                        subcategoryIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (subcategoryIndex == -1){
+                    console.log("category not found");
+                    setTimeout(() => {
+                        this.getAllCategories();
+                    },1000)
+                } else {
+                    this.modifySubcategory(subcategoryIndex);
+                }
             }
         });
     }
@@ -361,6 +377,43 @@ class UserInterface {
             });
 
         })
+    }
+
+    modifySubcategory(subcategoryIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->get all-->modify subcategory");
+        console.log("-".repeat(60));
+        let subcategory = SubcategoryService.subcategories[subcategoryIndex];
+        console.log(`category name : ${subcategory.name}`);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ",modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the new name : ",answer => {
+                    if(typeof answer === "string" && answer != "") {
+                        let result = SubcategoryService.edit(subcategory.id, answer);
+                        console.log(result == -1 ? "edit failed" : "edit successeded");
+                        setTimeout(() => {
+                            this.getallSubcategories();
+                        },1000)
+                    } else {
+                        console.log("please enter a valid name");
+                        setTimeout(() => {
+                            this.modifyCategory(subcategoryIndex);
+                        },1000)
+                    }
+                });
+            } else if (modifyType == 2) {
+               let result = SubcategoryService.delete(subcategory.id);
+               if (result == -1) {
+                console.log("delete failed");
+               } else {
+                console.log("delete successeded");
+               }
+               setTimeout(() => {
+                this.manageSubcategories();
+            },1000);
+        }
+        });
     }
 }
 let userInterface = new UserInterface();
