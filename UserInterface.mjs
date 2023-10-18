@@ -85,21 +85,15 @@ class UserInterface {
                     this.getallSubcategories();
                     break;
                 case "2":
-                    console.log("search by");
+                    this.searchForSubcategory();
                     break;
                 case "3":
                     this.addSubcategory();
                     break;
                 case "4":
-                    console.log("edit");
-                    break;
-                case "5":
-                    console.log("delete");
-                    break;
-                case "6":
                     this.mainUI();
                     break;
-                case "7":
+                case "5":
                     console.log("app closed");
                     this.readl.close();
                     break;
@@ -261,6 +255,11 @@ class UserInterface {
                 console.log("Category id : " + searchResult.category.id);
                 console.log("Category name : " + searchResult.category.name);
             }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ",(answer) => {
+                this.manageSubcategories();
+            });
+
         })
     }
     modifyCategory(categoryIndex) {
@@ -314,6 +313,7 @@ class UserInterface {
             });
         });
     }
+    
     getallSubcategories() {
         console.clear();
         console.log("-".repeat(60));
@@ -337,6 +337,30 @@ class UserInterface {
                 this.manageSubcategories();
             }
         });
+    }
+
+    searchForSubcategory() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the name or the id for the subcategory you want to search for : ", (answer) => {
+            let searchResult = SubcategoryService.searchBy("name", answer);
+            if (searchResult == -1) {
+                searchResult = SubcategoryService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("Subcategory id : " + searchResult.subcategory.id);
+                console.log("Subcategory name : " + searchResult.subcategory.name);
+            }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ",(answer) => {
+                this.manageSubcategories();
+            });
+
+        })
     }
 }
 let userInterface = new UserInterface();
