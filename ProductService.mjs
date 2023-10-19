@@ -67,7 +67,7 @@ export class ProductService {
 
     
     static edit(id, column, newValue) {
-        if (typeof id != "number" || id < 1 || ((column == "stock" || column == "buyingPrice" || column == "sellingPrice") && Number.isNaN(+newValue)) || column == "id" || column == "subcategoryID") {
+        if (typeof id != "number" || id < 1 || ((column == "stock" || column == "buyingPrice" || column == "sellingPrice") && Number.isNaN(+newValue)) || column == "id" || column == "subcategoryID" || (column != "name" && column != "producer" && column != "stock " && column != "buyingPrice" && column != "sellingPrice" )) {
             return -1;
         }
         let productIndex = this.searchBy("id",id).index;
