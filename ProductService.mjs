@@ -7,7 +7,7 @@ export class ProductService {
 
     static searchBy(column,input) {
         let result = -1;
-         this.pro4.find((product,currentIndex) => {
+         this.products.find((product,currentIndex) => {
             if (product[column] == input) {
                 result = {"product":product,"index":currentIndex};
                 return;
@@ -16,4 +16,14 @@ export class ProductService {
         return result;
     }
 
+    static getLastID() {
+        let maxID = 1;
+        this.products.map((product) => {
+            if (product.id > maxID) {
+                maxID = product.id
+            }
+        });
+        return maxID;
+
+    }
 }
