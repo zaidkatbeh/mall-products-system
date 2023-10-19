@@ -51,4 +51,16 @@ export class ProductService {
         this.products.push(new Product(this.getLastID() + 1, name, subcategoryID, producer, stock, byuingPrice, sellingPrice));
         return 1;
     }
+
+    static delete(id) {
+        if(typeof id != "number" || id < 1) {
+            return -1;
+        }
+        let product = this.searchBy("id",id);
+        if(product == -1) {
+            console.log("product not found");
+            return -1;
+        }
+        return (this.products.splice(product.index, 1)) ? 1 : -1;
+    }
 }
