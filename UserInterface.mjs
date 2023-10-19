@@ -101,7 +101,7 @@ class UserInterface {
                     break;
                 default:
                     console.log("please enter a valid number");
-                    this.manageCategories();
+                    this.manageSubcategories();
             }
         })
     }
@@ -149,7 +149,7 @@ class UserInterface {
                     this.getallDiscounts();
                     break;
                 case "2":
-                    console.log("search");
+                    this.searchForDiscounts();
                     break;
                 case "3":
                     this.addDiscount();
@@ -163,7 +163,7 @@ class UserInterface {
                     break;
                 default:
                     console.log("please enter a valid number");
-                    this.manageProducts();
+                    this.manageDiscounts();
             }
         })
     }
@@ -484,7 +484,7 @@ class UserInterface {
                 searchResult = ProductService.searchBy("producer", answer);
             }
             if (searchResult == -1) {
-                searchResult = SubcategoryService.searchBy("subcategoryID", answer);
+                searchResult = ProductService.searchBy("subcategoryID", answer);
             }
             if (searchResult == -1) {
                 console.log("no results");
@@ -585,7 +585,7 @@ class UserInterface {
         console.log("-".repeat(66));
         this.readl.question("to see any discount info or modify it  enter its id ,to go back enter <back> : ", answer => {
             if (answer == "back") {
-                this.managediscounts();
+                this.manageDiscounts();
             } else {
                 let discountIndex = -1;
                 discounts.map((discount, currentIndex) => {
@@ -607,7 +607,37 @@ class UserInterface {
     }
 
     modifyDiscount() {
+    }
 
+    searchForDiscounts() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the id, product id ,price or ending date  for the discount you want to search for : ", (answer) => {
+            let searchResult = DiscountService.searchBy("productID", answer);
+            if (searchResult == -1) {
+                searchResult = DiscountService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = DiscountService.searchBy("price", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = DiscountService.searchBy("endingDate", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("discount id : " + searchResult.discount.id);
+                console.log("discount product id  : " + searchResult.discount.productID);
+                console.log("discount price : " + searchResult.discount.price);
+                console.log("discount ending date price : " + searchResult.discount.endingDate);
+            }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ", (answer) => {
+                this.manageDiscounts();
+            });
+        })
     }
 }
 let userInterface = new UserInterface();
