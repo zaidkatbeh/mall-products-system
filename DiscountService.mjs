@@ -47,4 +47,17 @@ export class DiscountService {
         this.discounts.push(new Discount(this.getLastID() + 1, productID, price, endData));
         return 1;
     }
+
+    static delete(id) {
+        if (typeof id != "number" || id < 1) {
+            return -1;
+        }
+        let discount = this.searchBy("id", id);
+        if(discount == -1) {
+            console.log("discount not found");
+            return -1;
+        }
+        this.discounts.splice(discount.index, 1);
+        return 1;
+    }
 }
