@@ -10,11 +10,8 @@ export class Category {
         }
     }
     subcategories() {
-        console.log("get category subcategory called");
         let subcategoryService =  SubcategoryService;
-        return subcategoryService.subcategories.filter((subcategory) => {
-            console.log(`---->${subcategory.categoryID}<-----`);
-            return subcategory.categoryID == this.id;
+        return subcategoryService.subcategories.filter((subcategory) => {            return subcategory.categoryID == this.id;
         });
     }
 }

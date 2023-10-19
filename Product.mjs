@@ -1,3 +1,5 @@
+import { DiscountService } from "./DiscountService.mjs";
+
 export class Product {
     id;
     name;
@@ -15,5 +17,11 @@ export class Product {
         this.stock = stock;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
+    }
+    
+    discount() {
+        return DiscountService.discounts.filter((discount) => {
+                        return discount.productID == this.id;
+        });
     }
 }

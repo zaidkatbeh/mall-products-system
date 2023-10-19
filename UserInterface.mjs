@@ -242,12 +242,26 @@ class UserInterface {
             if (searchResult == -1) {
                 console.log("no results");
             } else {
+                let subcategories = searchResult.category.subcategories()
+
                 console.log("Category id : " + searchResult.category.id);
                 console.log("Category name : " + searchResult.category.name);
+                console.log("*".repeat(20));
+                console.log("subcategories");
+                console.log();
+                if (subcategories.length == 0) {
+                    console.log("there is no subcategories to this category");
+                } else {
+                    subcategories.forEach(subcategory => {
+                        console.log(`subcategory id :  ${subcategory.id}`);
+                        console.log(`subcategory name :  ${subcategory.name}`);
+                    });
+                }
+                
             }
             console.log("-".repeat(30));
             this.readl.question("to go back enter anything : ", (answer) => {
-                this.manageSubcategories();
+                this.manageCategories();
             });
 
         })
@@ -358,8 +372,19 @@ class UserInterface {
             if (searchResult == -1) {
                 console.log("no results");
             } else {
+                let products = searchResult.subcategory.products();
                 console.log("Subcategory id : " + searchResult.subcategory.id);
                 console.log("Subcategory name : " + searchResult.subcategory.name);
+                console.log("products");
+                console.log();
+                if (products.length == 0) {
+                    console.log("there is no products to this subcategory");
+                } else {
+                    products.forEach(product => {
+                        console.log(`product id :  ${product.id}`);
+                        console.log(`product name :  ${product.name}`);
+                    });
+                }
             }
             console.log("-".repeat(30));
             this.readl.question("to go back enter anything : ", (answer) => {
@@ -489,6 +514,7 @@ class UserInterface {
             if (searchResult == -1) {
                 console.log("no results");
             } else {
+                let discount = searchResult.product.discount()[0];
                 console.log("Product id : " + searchResult.product.id);
                 console.log("Product name : " + searchResult.product.name);
                 console.log("Product subcategory id  : " + searchResult.product.subcategoryID);
@@ -496,6 +522,13 @@ class UserInterface {
                 console.log("Product stock  : " + searchResult.product.stock);
                 console.log("Product buying price : " + searchResult.product.buyingPrice);
                 console.log("Product selling price : " + searchResult.product.sellingPrice);
+                console.log("discounts");
+                if (discount == undefined) {
+                    console.log("there is no discount to this product");
+                } else {
+                        console.log(`discount id :  ${discount.id}`);
+                        console.log(`product price :  ${discount.price}`);
+                }
             }
             console.log("-".repeat(30));
             this.readl.question("to go back enter anything : ", (answer) => {
