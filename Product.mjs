@@ -21,7 +21,7 @@ export class Product {
     
     discount() {
         return DiscountService.discounts.filter((discount) => {
-                        return discount.productID == this.id;
+                    return discount.productID == this.id;
         });
     }
 }

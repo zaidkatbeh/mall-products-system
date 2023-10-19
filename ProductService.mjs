@@ -1,4 +1,5 @@
 import { SubcategoryService } from "./SubcategoryService.mjs";
+
 import { Product } from "./product.mjs";
 
 export class ProductService {
@@ -10,6 +11,7 @@ export class ProductService {
 
     static searchBy(column,input) {
         let result = -1;
+
          this.products.find((product,currentIndex) => {
             if (product[column] == input) {
                 result = {"product":product,"index":currentIndex};
@@ -21,6 +23,7 @@ export class ProductService {
 
     static getLastID() {
         let maxID = 1;
+
         this.products.map((product) => {
             if (product.id > maxID) {
                 maxID = product.id
@@ -67,7 +70,7 @@ export class ProductService {
 
     
     static edit(id, column, newValue) {
-        if (typeof id != "number" || id < 1 || ((column == "stock" || column == "buyingPrice" || column == "sellingPrice") && Number.isNaN(+newValue)) || column == "id" || column == "subcategoryID" || (column != "name" && column != "producer" && column != "stock " && column != "buyingPrice" && column != "sellingPrice" )) {
+        if (typeof id != "number" || id < 1 || ((column == "stock" || column == "buyingPrice" || column == "sellingPrice") && Number.isNaN(+newValue)) ||  (column != "name" && column != "producer" && column != "stock " && column != "buyingPrice" && column != "sellingPrice" )) {
             return -1;
         }
         let productIndex = this.searchBy("id",id).index;
@@ -78,6 +81,7 @@ export class ProductService {
         // a variable to check if there is already a product with the same name, subcategory id and producer
         let doesCopyExists = -1;
         if (column == "name") {
+            
             this.products.map((product) => {
                 if(product.id != id && product.name == newValue && product.producer == this.products[productIndex].producer && product.subcategoryID == this.products[productIndex].subcategoryID) {
                     doesCopyExists = 1;
