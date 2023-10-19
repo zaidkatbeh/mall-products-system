@@ -78,12 +78,10 @@ export class CategoryService {
                 return;
             }
         })
-        console.log(categoryIndex);
         if (categoryIndex == -1) {
             console.log("category not found");
             return -1;
         }
-        console.log(this.categories[categoryIndex]);
         return this.categories[categoryIndex].subcategories();
     }
 }
