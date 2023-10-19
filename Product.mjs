@@ -4,16 +4,16 @@ export class Product {
     subcategoryID;
     producer;
     stock;
-    byuingPrice;
+    buyingPrice;
     sellingPrice;
 
-    constructor(id, name, subcategoryID, producer, stock, byuingPrice, sellingPrice) {
+    constructor(id, name, subcategoryID, producer, stock, buyingPrice, sellingPrice) {
         this.id = id;
         this.name = name;
         this.subcategoryID = subcategoryID;
         this.producer = producer;
         this.stock = stock;
-        this.byuingPrice = byuingPrice;
+        this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
     }
 }

@@ -30,8 +30,8 @@ export class ProductService {
     }
 
     // you cannot add 2 products with the same subcategory,name and producer
-    static add(subcategoryID, name, producer, stock, byuingPrice, sellingPrice) {
-        if(typeof +subcategoryID != "number" || typeof name != "string") {
+    static add(subcategoryID, name, producer, stock, buyingPrice, sellingPrice) {
+        if(Number.isNaN(+subcategoryID) || typeof name != "string" || typeof producer != "string" || Number.isNaN(+stock) || Number.isNaN(+buyingPrice) || Number.isNaN(+sellingPrice)) {
             return -1;
         }
         if (SubcategoryService.searchBy("id",subcategoryID) == -1) {
@@ -49,7 +49,7 @@ export class ProductService {
             console.log("there is already a product with the same subcategory id, name and producer");
             return -1;
         }
-        this.products.push(new Product(this.getLastID() + 1, name, subcategoryID, producer, stock, byuingPrice, sellingPrice));
+        this.products.push(new Product(this.getLastID() + 1, name, subcategoryID, producer, stock, buyingPrice, sellingPrice));
         return 1;
     }
 
@@ -67,7 +67,7 @@ export class ProductService {
 
     
     static edit(id, column, newValue) {
-        if (typeof id != "number" || id < 1 || typeof newValue != "string" || column == "id" || column == "categoryID") {
+        if (typeof id != "number" || id < 1 || ((column == "stock" || column == "buyingPrice" || column == "sellingPrice") && Number.isNaN(+newValue)) || column == "id" || column == "subcategoryID" || (column != "name" && column != "producer" && column != "stock " && column != "buyingPrice" && column != "sellingPrice" )) {
             return -1;
         }
         let productIndex = this.searchBy("id",id).index;

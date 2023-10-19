@@ -2,6 +2,7 @@ import readline from "readline";
 
 import { CategoryService } from "./CategoryService.mjs"
 import { SubcategoryService } from "./SubcategoryService.mjs";
+import { ProductService } from "./ProductService.mjs";
 
 class UserInterface {
     readl;
@@ -109,34 +110,28 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("MPMS--->manage products");
         console.log("-".repeat(60));
-        this.printOptions(" get all", "search by", "add new", "edit", "delete", "go back");
+        this.printOptions(" get all", "search by", "add new", "go back");
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    this.getallProducts();
                     break;
                 case "2":
-                    console.log("search by");
+                    this.searchForProduct();
                     break;
                 case "3":
-                    console.log("add new ");
+                    this.addProduct();
                     break;
                 case "4":
-                    console.log("edit");
-                    break;
-                case "5":
-                    console.log("delete");
-                    break;
-                case "6":
                     this.mainUI();
                     break;
-                case "7":
+                case "5":
                     console.log("app closed");
                     this.readl.close();
                     break;
                 default:
                     console.log("please enter a valid number");
-                    this.manageCategories();
+                    this.manageProducts();
             }
         })
     }
@@ -217,22 +212,22 @@ class UserInterface {
             });
         }
         console.log("-".repeat(30));
-        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ",answer => {
-            if(answer == "back") {
+        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ", answer => {
+            if (answer == "back") {
                 this.manageCategories();
             } else {
                 let categoryIndex = -1;
-                categories.map((category,currentIndex) => {
-                    if(category.id == answer) {
+                categories.map((category, currentIndex) => {
+                    if (category.id == answer) {
                         categoryIndex = currentIndex;
                         return;
                     }
                 });
-                if (categoryIndex == -1){
+                if (categoryIndex == -1) {
                     console.log("category not found");
                     setTimeout(() => {
                         this.getAllCategories();
-                    },1000)
+                    }, 1000)
                 } else {
                     this.modifyCategory(categoryIndex);
                 }
@@ -256,7 +251,7 @@ class UserInterface {
                 console.log("Category name : " + searchResult.category.name);
             }
             console.log("-".repeat(30));
-            this.readl.question("to go back enter anything : ",(answer) => {
+            this.readl.question("to go back enter anything : ", (answer) => {
                 this.manageSubcategories();
             });
 
@@ -269,33 +264,33 @@ class UserInterface {
         console.log("-".repeat(60));
         let category = CategoryService.categories[categoryIndex];
         console.log(`category name : ${category.name}`);
-        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ",modifyType => {
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ", modifyType => {
             if (modifyType == 1) {
-                this.readl.question("enter the new name : ",answer => {
-                    if(typeof answer === "string" && answer != "") {
+                this.readl.question("enter the new name : ", answer => {
+                    if (typeof answer === "string" && answer != "") {
                         let result = CategoryService.edit(category.id, answer);
                         console.log(result == -1 ? "edit failed" : "edit successeded");
                         setTimeout(() => {
                             this.getAllCategories();
-                        },1000)
+                        }, 1000)
                     } else {
                         console.log("please enter a valid name");
                         setTimeout(() => {
                             this.modifyCategory(categoryIndex);
-                        },1000)
+                        }, 1000)
                     }
                 });
             } else if (modifyType == 2) {
-               let result = CategoryService.delete(category.id);
-               if (result == -1) {
-                console.log("delete failed");
-               } else {
-                console.log("delete successeded");
-               }
-               setTimeout(() => {
-                this.manageCategories();
-            },1000);
-        }
+                let result = CategoryService.delete(category.id);
+                if (result == -1) {
+                    console.log("delete failed");
+                } else {
+                    console.log("delete successeded");
+                }
+                setTimeout(() => {
+                    this.manageCategories();
+                }, 1000);
+            }
         });
     }
 
@@ -305,49 +300,49 @@ class UserInterface {
         console.log("MPMS--->manage subcategories--->add new");
         console.log("-".repeat(60));
         this.readl.question("enter the category id : ", categoryID => {
-            this.readl.question("enter the subcategory name : ",subcategoryName => {
-                console.log(SubcategoryService.add(categoryID,subcategoryName) == -1 ? "adding a subcategory failed" : "subcategory has been added");
-                    setTimeout(() => {
-                        this.manageSubcategories();
-                    },1000)
+            this.readl.question("enter the subcategory name : ", subcategoryName => {
+                console.log(SubcategoryService.add(categoryID, subcategoryName) == -1 ? "adding a subcategory failed" : "subcategory has been added");
+                setTimeout(() => {
+                    this.manageSubcategories();
+                }, 1000)
             });
         });
     }
-    
+
     getallSubcategories() {
         console.clear();
         console.log("-".repeat(60));
         console.log("MPMS--->manage subcategories--->get all");
         console.log("-".repeat(60));
-        let Subcategories = SubcategoryService.getAll();
-        if (Subcategories[0] == null) {
+        let subcategories = SubcategoryService.getAll();
+        if (subcategories[0] == null) {
             console.log("there is no subcategories, add some");
         }
         else {
-            console.log("id" + (" ".repeat(5))  + "categoryID" + (" ".repeat(5)) + "name");
+            console.log("id" + (" ".repeat(5)) + "categoryID" + (" ".repeat(5)) + "name");
             console.log("-".repeat(26));
-            Subcategories.forEach(Subcategory => {
-                let space = 22 - ("" + Subcategory.id).length;
-                console.log(`${Subcategory.id}${" ".repeat(space / 2)}${Subcategory.categoryID}${" ".repeat(space / 2)}${Subcategory.name}`);
+            subcategories.forEach(subcategory => {
+                let space = 22 - ("" + subcategory.id).length;
+                console.log(`${subcategory.id}${" ".repeat(space / 2)}${subcategory.categoryID}${" ".repeat(space / 2)}${subcategory.name}`);
             });
         }
         console.log("-".repeat(30));
-        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ",answer => {
+        this.readl.question("to see any subcategory info or modify it  enter its id ,to go back enter <back> : ", answer => {
             if (answer == "back") {
                 this.manageSubcategories();
             } else {
                 let subcategoryIndex = -1;
-                Subcategories.map((subcategory,currentIndex) => {
-                    if(subcategory.id == answer) {
+                subcategories.map((subcategory, currentIndex) => {
+                    if (subcategory.id == answer) {
                         subcategoryIndex = currentIndex;
                         return;
                     }
                 });
-                if (subcategoryIndex == -1){
-                    console.log("category not found");
+                if (subcategoryIndex == -1) {
+                    console.log("subcategory not found");
                     setTimeout(() => {
                         this.getAllCategories();
-                    },1000)
+                    }, 1000)
                 } else {
                     this.modifySubcategory(subcategoryIndex);
                 }
@@ -372,7 +367,7 @@ class UserInterface {
                 console.log("Subcategory name : " + searchResult.subcategory.name);
             }
             console.log("-".repeat(30));
-            this.readl.question("to go back enter anything : ",(answer) => {
+            this.readl.question("to go back enter anything : ", (answer) => {
                 this.manageSubcategories();
             });
 
@@ -386,33 +381,176 @@ class UserInterface {
         console.log("-".repeat(60));
         let subcategory = SubcategoryService.subcategories[subcategoryIndex];
         console.log(`category name : ${subcategory.name}`);
-        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ",modifyType => {
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ", modifyType => {
             if (modifyType == 1) {
-                this.readl.question("enter the new name : ",answer => {
-                    if(typeof answer === "string" && answer != "") {
+                this.readl.question("enter the new name : ", answer => {
+                    if (typeof answer === "string" && answer != "") {
                         let result = SubcategoryService.edit(subcategory.id, answer);
                         console.log(result == -1 ? "edit failed" : "edit successeded");
                         setTimeout(() => {
                             this.getallSubcategories();
-                        },1000)
+                        }, 1000)
                     } else {
                         console.log("please enter a valid name");
                         setTimeout(() => {
                             this.modifyCategory(subcategoryIndex);
-                        },1000)
+                        }, 1000)
                     }
                 });
             } else if (modifyType == 2) {
-               let result = SubcategoryService.delete(subcategory.id);
-               if (result == -1) {
-                console.log("delete failed");
-               } else {
-                console.log("delete successeded");
-               }
-               setTimeout(() => {
-                this.manageSubcategories();
-            },1000);
+                let result = SubcategoryService.delete(subcategory.id);
+                if (result == -1) {
+                    console.log("delete failed");
+                } else {
+                    console.log("delete successeded");
+                }
+                setTimeout(() => {
+                    this.manageSubcategories();
+                }, 1000);
+            }
+        });
+    }
+
+    addProduct() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->add new");
+        console.log("-".repeat(60));
+        this.readl.question("enter the subcategory id : ", subcategoryID => {
+            this.readl.question("enter the product name : ", productName => {
+                this.readl.question("enter the producer name : ", producer => {
+                    this.readl.question("enter the stock: ", stock => {
+                        this.readl.question("enter the buying price : ", buyingPrice => {
+                            this.readl.question("enter the sellinhg price : ", sellingPrice => {
+                                console.log(ProductService.add(subcategoryID, productName, producer, stock,buyingPrice,sellingPrice) == -1 ? "adding a product failed" : "product has been added");
+                                setTimeout(() => {
+                                    this.manageProducts();
+                                }, 1000);
+                            })
+                        })
+                    })
+
+                })
+            });
+        });
+    }
+
+    getallProducts() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->get all");
+        console.log("-".repeat(60));
+        let products = ProductService.getAll();
+        if (products[0] == null) {
+            console.log("there is no products, add some");
         }
+        else {
+            console.log("id" + (" ".repeat(5)) + "subcategoryID" + (" ".repeat(5)) + "name"+ (" ".repeat(5)) + "producer"+ (" ".repeat(5)) + "stock"+ (" ".repeat(5)) + "buying price"+ (" ".repeat(5)) + "selling price");
+            console.log("-".repeat(96));
+            products.forEach(product => {
+                console.log(`${product.id}${" ".repeat(10)}${product.subcategoryID} ${" ".repeat(10)} ${product.name}${" ".repeat(8)}${product.producer}${" ".repeat(8)}${product.stock}${" ".repeat(15)}${product.buyingPrice}${" ".repeat(15)}${product.sellingPrice}`);
+            });
+        }
+        console.log("-".repeat(96));
+        this.readl.question("to see any product info or modify it  enter its id ,to go back enter <back> : ", answer => {
+            if (answer == "back") {
+                this.manageProducts();
+            } else {
+                let productIndex = -1;
+                products.map((product, currentIndex) => {
+                    if (product.id == answer) {
+                        productIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (productIndex == -1) {
+                    console.log("product not found");
+                    setTimeout(() => {
+                        this.getallProducts();
+                    }, 1000)
+                } else {
+                    this.modifyProduct(productIndex);
+                }
+            }
+        });
+    }
+
+    searchForProduct() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the name, producer, subcategory id or the id  info for the product you want to search for : ", (answer) => {
+            let searchResult = ProductService.searchBy("name", answer);
+            if (searchResult == -1) {
+                searchResult = ProductService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = ProductService.searchBy("producer", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = SubcategoryService.searchBy("subcategoryID", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("Product id : " + searchResult.product.id);
+                console.log("Product name : " + searchResult.product.name);
+                console.log("Product subcategory id  : " + searchResult.product.subcategoryID);
+                console.log("Product producer  : " + searchResult.product.producer);
+                console.log("Product stock  : " + searchResult.product.stock);
+                console.log("Product buying price : " + searchResult.product.buyingPrice);
+                console.log("Product selling price : " + searchResult.product.sellingPrice);
+            }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ", (answer) => {
+                this.manageProducts();
+            });
+        })
+    }
+
+    modifyProduct(productIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->get all-->modify product");
+        console.log("-".repeat(60));
+        let product = ProductService.products[productIndex];
+        console.log("Product id : " + product.id);
+        console.log("Product name : " + product.name);
+        console.log("Product subcategory id  : " + product.subcategoryID);
+        console.log("Product producer  : " + product.producer);
+        console.log("Product stock  : " + product.stock);
+        console.log("Product buying price : " + product.buyingPrice);
+        console.log("Product selling price : " + product.sellingPrice);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ", modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the column name you want to edit  : ", columnName => {
+                    this.readl.question("enter the value  you want to edit to: ", newValue => {
+                        if (typeof columnName === "string" && columnName != "" && newValue != "") {
+                            let result = ProductService.edit(product.id,columnName,newValue);
+                            console.log(result == -1 ? "edit failed" : "edit successeded");
+                            setTimeout(() => {
+                                this.getallProducts();
+                            }, 1000)
+                        } else {
+                            console.log("please enter a valid data");
+                            setTimeout(() => {
+                                this.modifyProduct(subcategoryIndex);
+                            }, 1000)
+                        }
+                    })
+                });
+            } else if (modifyType == 2) {
+                let result = ProductService.delete(product.id);
+                if (result == -1) {
+                    console.log("delete failed");
+                } else {
+                    console.log("delete successeded");
+                }
+                setTimeout(() => {
+                    this.manageProducts();
+                }, 1000);
+            }
         });
     }
 }
