@@ -422,7 +422,7 @@ class UserInterface {
                     this.readl.question("enter the stock: ", stock => {
                         this.readl.question("enter the buying price : ", buyingPrice => {
                             this.readl.question("enter the sellinhg price : ", sellingPrice => {
-                                console.log(ProductService.add(subcategoryID, productName, producer, stock,buyingPrice,sellingPrice) == -1 ? "adding a subcategory failed" : "subcategory has been added");
+                                console.log(ProductService.add(subcategoryID, productName, producer, stock,buyingPrice,sellingPrice) == -1 ? "adding a product failed" : "product has been added");
                                 setTimeout(() => {
                                     this.manageProducts();
                                 }, 1000);
@@ -455,6 +455,22 @@ class UserInterface {
         this.readl.question("to see any product info or modify it  enter its id ,to go back enter <back> : ", answer => {
             if (answer == "back") {
                 this.manageProducts();
+            } else {
+                let productIndex = -1;
+                products.map((product, currentIndex) => {
+                    if (product.id == answer) {
+                        productIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (productIndex == -1) {
+                    console.log("product not found");
+                    setTimeout(() => {
+                        this.getallProducts();
+                    }, 1000)
+                } else {
+                    this.modifyProduct(productIndex);
+                }
             }
         });
     }
@@ -490,8 +506,52 @@ class UserInterface {
             this.readl.question("to go back enter anything : ", (answer) => {
                 this.manageProducts();
             });
-
         })
+    }
+
+    modifyProduct(productIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->get all-->modify product");
+        console.log("-".repeat(60));
+        let product = ProductService.products[productIndex];
+        console.log("Product id : " + product.id);
+        console.log("Product name : " + product.name);
+        console.log("Product subcategory id  : " + product.subcategoryID);
+        console.log("Product producer  : " + product.producer);
+        console.log("Product stock  : " + product.stock);
+        console.log("Product buying price : " + product.buyingPrice);
+        console.log("Product selling price : " + product.sellingPrice);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ", modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the column name you want to edit  : ", columnName => {
+                    this.readl.question("enter the value  you want to edit to: ", newValue => {
+                        if (typeof columnName === "string" && columnName != "" && newValue != "") {
+                            let result = ProductService.edit(product.id,columnName,newValue);
+                            console.log(result == -1 ? "edit failed" : "edit successeded");
+                            setTimeout(() => {
+                                this.getallProducts();
+                            }, 1000)
+                        } else {
+                            console.log("please enter a valid data");
+                            setTimeout(() => {
+                                this.modifyProduct(subcategoryIndex);
+                            }, 1000)
+                        }
+                    })
+                });
+            } else if (modifyType == 2) {
+                let result = ProductService.delete(product.id);
+                if (result == -1) {
+                    console.log("delete failed");
+                } else {
+                    console.log("delete successeded");
+                }
+                setTimeout(() => {
+                    this.manageProducts();
+                }, 1000);
+            }
+        });
     }
 }
 let userInterface = new UserInterface();
