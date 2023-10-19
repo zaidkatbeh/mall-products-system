@@ -77,7 +77,6 @@ export class ProductService {
         }
         // a variable to check if there is already a product with the same name, subcategory id and producer
         let doesCopyExists = -1;
-        console.log(`product index is ${productIndex}`);
         if (column == "name") {
             this.products.map((product) => {
                 if(product.id != id && product.name == newValue && product.producer == this.products[productIndex].producer && product.subcategoryID == this.products[productIndex].subcategoryID) {
