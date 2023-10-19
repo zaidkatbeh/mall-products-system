@@ -2,7 +2,7 @@ import { Discount } from "./Discount.mjs";
 import { ProductService } from "./ProductService.mjs";
 
 export class DiscountService {
-    static discounts = [];
+    static discounts = [new Discount(2, 2, 0.8, "20,02,2024")];
 
     static getAll() {
         return this.discounts;
