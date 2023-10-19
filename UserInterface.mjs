@@ -146,7 +146,7 @@ class UserInterface {
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("Get all");
+                    this.getallDiscounts();
                     break;
                 case "2":
                     console.log("search");
@@ -556,14 +556,58 @@ class UserInterface {
         console.log("-".repeat(60));
         this.readl.question("enter the product id : ", productID => {
             this.readl.question("enter the price : ", price => {
-                this.readl.question("enter the end date : ", endDate => {
-                    console.log(DiscountService.add(productID, price, endDate) == -1 ? "adding a discount failed" : "discount has been added");
+                this.readl.question("enter the end date : ", endingDate => {
+                    console.log(DiscountService.add(productID, price, endingDate) == -1 ? "adding a discount failed" : "discount has been added");
                     setTimeout(() => {
                         this.manageDiscounts();
                     }, 1000);
                 });
             });
         });
+    }
+
+    getallDiscounts() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->get all");
+        console.log("-".repeat(60));
+        let discounts = DiscountService.getAll();
+        if (discounts[0] == null) {
+            console.log("there is no discounts, add some");
+        }
+        else {
+            console.log("id" + (" ".repeat(5)) + "productID" + (" ".repeat(5)) + "price"+ (" ".repeat(5)) + "end date"+ (" ".repeat(5)));
+            console.log("-".repeat(66));
+            discounts.forEach(discount => {
+                console.log(`${discount.id}${" ".repeat(10)}${discount.productID} ${" ".repeat(10)} ${discount.price}${" ".repeat(5)}${discount.endingDate}`);
+            });
+        }
+        console.log("-".repeat(66));
+        this.readl.question("to see any discount info or modify it  enter its id ,to go back enter <back> : ", answer => {
+            if (answer == "back") {
+                this.managediscounts();
+            } else {
+                let discountIndex = -1;
+                discounts.map((discount, currentIndex) => {
+                    if (discount.id == answer) {
+                        discountIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (discountIndex == -1) {
+                    console.log("discount not found");
+                    setTimeout(() => {
+                        this.getallDiscounts();
+                    }, 1000)
+                } else {
+                    this.modifyDiscount(discountIndex);
+                }
+            }
+        });
+    }
+
+    modifyDiscount() {
+
     }
 }
 let userInterface = new UserInterface();

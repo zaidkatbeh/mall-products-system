@@ -2,12 +2,12 @@ export class Discount {
     id;
     productID;
     price
-    endingData;
+    endingDate;
 
-    constructor(id,productID,price,endingData) {
+    constructor(id,productID,price,endingDate) {
         this.id = id;
         this.productID = productID;
         this.price = price;
-        this.endingData = endingData;
+        this.endingDate = endingDate;
     }
 }
