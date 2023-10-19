@@ -80,4 +80,22 @@ export class SubcategoryService {
             return -1;
         }
     }
+
+    static getProducts(id) {
+        if (typeof id != "number") {
+            return -1;
+        }
+        let subcategoryIndex = -1;
+        this.subcategories.map((subcategory, currentIndex) => {
+            if (subcategory.id == id) {
+                subcategoryIndex = currentIndex;
+                return;
+            }
+        })
+        if (subcategoryIndex == -1) {
+            console.log("subcategory not found");
+            return -1;
+        }
+        return this.subcategories[subcategoryIndex].products();
+    }
 }
