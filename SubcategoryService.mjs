@@ -61,15 +61,23 @@ export class SubcategoryService {
         return 1;
     }
     static edit(id,newName) {
-        if (typeof id != "number" || id < 1 || typeof newName != "string") {
+        let subcategoryIndex = this.searchBy("id", id);
+        if (subcategoryIndex == -1) {
+            console.log("subcategory not found");
             return -1;
         }
-        let subcategory = this.searchBy("id",id);
-        if(subcategory == -1) {
-            console.log("subcateogry not found");
+        let isNameUsed = -1;
+        this.subcategories.map((subcategory) => {
+            if (subcategory.id != id && subcategory.name == newName) {
+                isNameUsed = 1;
+            }
+        });
+        if (isNameUsed == -1) {
+            this.subcategories[subcategoryIndex.index].name = newName;
+            return 1;
+        } else {
+            console.log("name already used");
             return -1;
         }
-        this.subcategories[subcategory.index].name = newName;
-        return 1;
     }
 }
