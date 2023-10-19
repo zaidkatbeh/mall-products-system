@@ -114,7 +114,7 @@ class UserInterface {
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    this.getallProducts();
                     break;
                 case "2":
                     console.log("search for products");
@@ -314,32 +314,32 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("MPMS--->manage subcategories--->get all");
         console.log("-".repeat(60));
-        let Subcategories = SubcategoryService.getAll();
-        if (Subcategories[0] == null) {
+        let subcategories = SubcategoryService.getAll();
+        if (subcategories[0] == null) {
             console.log("there is no subcategories, add some");
         }
         else {
             console.log("id" + (" ".repeat(5)) + "categoryID" + (" ".repeat(5)) + "name");
             console.log("-".repeat(26));
-            Subcategories.forEach(Subcategory => {
-                let space = 22 - ("" + Subcategory.id).length;
-                console.log(`${Subcategory.id}${" ".repeat(space / 2)}${Subcategory.categoryID}${" ".repeat(space / 2)}${Subcategory.name}`);
+            subcategories.forEach(subcategory => {
+                let space = 22 - ("" + subcategory.id).length;
+                console.log(`${subcategory.id}${" ".repeat(space / 2)}${subcategory.categoryID}${" ".repeat(space / 2)}${subcategory.name}`);
             });
         }
         console.log("-".repeat(30));
-        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ", answer => {
+        this.readl.question("to see any subcategory info or modify it  enter its id ,to go back enter <back> : ", answer => {
             if (answer == "back") {
                 this.manageSubcategories();
             } else {
                 let subcategoryIndex = -1;
-                Subcategories.map((subcategory, currentIndex) => {
+                subcategories.map((subcategory, currentIndex) => {
                     if (subcategory.id == answer) {
                         subcategoryIndex = currentIndex;
                         return;
                     }
                 });
                 if (subcategoryIndex == -1) {
-                    console.log("category not found");
+                    console.log("subcategory not found");
                     setTimeout(() => {
                         this.getAllCategories();
                     }, 1000)
@@ -432,6 +432,30 @@ class UserInterface {
 
                 })
             });
+        });
+    }
+
+    getallProducts() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->get all");
+        console.log("-".repeat(60));
+        let products = ProductService.getAll();
+        if (products[0] == null) {
+            console.log("there is no products, add some");
+        }
+        else {
+            console.log("id" + (" ".repeat(5)) + "subcategoryID" + (" ".repeat(5)) + "name"+ (" ".repeat(5)) + "producer"+ (" ".repeat(5)) + "stock"+ (" ".repeat(5)) + "buying price"+ (" ".repeat(5)) + "selling price");
+            console.log("-".repeat(96));
+            products.forEach(product => {
+                console.log(`${product.id}${" ".repeat(10)}${product.subcategoryID} ${" ".repeat(10)} ${product.name}${" ".repeat(8)}${product.producer}${" ".repeat(8)}${product.stock}${" ".repeat(15)}${product.byuingPrice}${" ".repeat(15)}${product.sellingPrice}`);
+            });
+        }
+        console.log("-".repeat(96));
+        this.readl.question("to see any product info or modify it  enter its id ,to go back enter <back> : ", answer => {
+            if (answer == "back") {
+                this.manageProducts();
+            }
         });
     }
 }
