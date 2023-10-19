@@ -29,6 +29,7 @@ export class ProductService {
         return maxID;
     }
 
+    // you cannot add 2 products with the same subcategory,name and producer
     static add(subcategoryID, name, producer, stock, byuingPrice, sellingPrice) {
         if(typeof +subcategoryID != "number" || typeof name != "string") {
             return -1;
@@ -39,13 +40,13 @@ export class ProductService {
         }
         let alreadyExist = false;
         this.products.map((product) => {
-            if (product.name == name && product.categoryID == categoryID) {
+            if (product.name == name && product.subcategoryID == subcategoryID && product.producer == producer) {
                 alreadyExist = true;
                 return;
             }
         });
         if (alreadyExist == true) {
-            console.log("there is already a product with the same subcategory id and name");
+            console.log("there is already a product with the same subcategory id, name and producer");
             return -1;
         }
         this.products.push(new Product(this.getLastID() + 1, name, subcategoryID, producer, stock, byuingPrice, sellingPrice));
