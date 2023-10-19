@@ -3,6 +3,7 @@ import readline from "readline";
 import { CategoryService } from "./CategoryService.mjs"
 import { SubcategoryService } from "./SubcategoryService.mjs";
 import { ProductService } from "./ProductService.mjs";
+import { DiscountService } from "./DiscountService.mjs";
 
 class UserInterface {
     readl;
@@ -17,7 +18,7 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("Welcome to mall products manegment system (MPMS)");
         console.log("-".repeat(60));
-        this.printOptions("Manage Categories", "Manage Subcategories", "Manage Products", "Manage Offers")
+        this.printOptions("Manage Categories", "Manage Subcategories", "Manage Products", "Manage Discounts")
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
@@ -30,7 +31,7 @@ class UserInterface {
                     this.manageProducts();
                     break;
                 case "4":
-                    this.manageOffers();
+                    this.manageDiscounts();
                     break;
                 case "5":
                     console.log("app is closed");
@@ -136,39 +137,33 @@ class UserInterface {
         })
     }
 
-    manageOffers() {
+    manageDiscounts() {
         console.clear();
         console.log("-".repeat(60));
-        console.log("MPMS--->manage offers");
+        console.log("MPMS--->manage discounts");
         console.log("-".repeat(60));
-        this.printOptions(" get all", "search by", "add new", "edit", "delete", "go back");
+        this.printOptions(" get all", "search by", "add new", "go back");
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    console.log("Get all");
                     break;
                 case "2":
-                    console.log("search by");
+                    console.log("search");
                     break;
                 case "3":
-                    console.log("add new ");
+                    this.addDiscount();
                     break;
                 case "4":
-                    console.log("edit");
-                    break;
-                case "5":
-                    console.log("delete");
-                    break;
-                case "6":
                     this.mainUI();
                     break;
-                case "7":
+                case "5":
                     console.log("app closed");
                     this.readl.close();
                     break;
                 default:
                     console.log("please enter a valid number");
-                    this.manageCategories();
+                    this.manageProducts();
             }
         })
     }
@@ -551,6 +546,23 @@ class UserInterface {
                     this.manageProducts();
                 }, 1000);
             }
+        });
+    }
+
+    addDiscount() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->add new");
+        console.log("-".repeat(60));
+        this.readl.question("enter the product id : ", productID => {
+            this.readl.question("enter the price : ", price => {
+                this.readl.question("enter the end date : ", endDate => {
+                    console.log(DiscountService.add(productID, price, endDate) == -1 ? "adding a discount failed" : "discount has been added");
+                    setTimeout(() => {
+                        this.manageDiscounts();
+                    }, 1000);
+                });
+            });
         });
     }
 }
