@@ -117,7 +117,7 @@ class UserInterface {
                     this.getallProducts();
                     break;
                 case "2":
-                    console.log("search for products");
+                    this.searchForProduct();
                     break;
                 case "3":
                     this.addProduct();
@@ -448,7 +448,7 @@ class UserInterface {
             console.log("id" + (" ".repeat(5)) + "subcategoryID" + (" ".repeat(5)) + "name"+ (" ".repeat(5)) + "producer"+ (" ".repeat(5)) + "stock"+ (" ".repeat(5)) + "buying price"+ (" ".repeat(5)) + "selling price");
             console.log("-".repeat(96));
             products.forEach(product => {
-                console.log(`${product.id}${" ".repeat(10)}${product.subcategoryID} ${" ".repeat(10)} ${product.name}${" ".repeat(8)}${product.producer}${" ".repeat(8)}${product.stock}${" ".repeat(15)}${product.byuingPrice}${" ".repeat(15)}${product.sellingPrice}`);
+                console.log(`${product.id}${" ".repeat(10)}${product.subcategoryID} ${" ".repeat(10)} ${product.name}${" ".repeat(8)}${product.producer}${" ".repeat(8)}${product.stock}${" ".repeat(15)}${product.buyingPrice}${" ".repeat(15)}${product.sellingPrice}`);
             });
         }
         console.log("-".repeat(96));
@@ -457,6 +457,41 @@ class UserInterface {
                 this.manageProducts();
             }
         });
+    }
+
+    searchForProduct() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage products--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the name, producer, subcategory id or the id  info for the product you want to search for : ", (answer) => {
+            let searchResult = ProductService.searchBy("name", answer);
+            if (searchResult == -1) {
+                searchResult = ProductService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = ProductService.searchBy("producer", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = SubcategoryService.searchBy("subcategoryID", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("Product id : " + searchResult.product.id);
+                console.log("Product name : " + searchResult.product.name);
+                console.log("Product subcategory id  : " + searchResult.product.subcategoryID);
+                console.log("Product producer  : " + searchResult.product.producer);
+                console.log("Product stock  : " + searchResult.product.stock);
+                console.log("Product buying price : " + searchResult.product.buyingPrice);
+                console.log("Product selling price : " + searchResult.product.sellingPrice);
+            }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ", (answer) => {
+                this.manageProducts();
+            });
+
+        })
     }
 }
 let userInterface = new UserInterface();
