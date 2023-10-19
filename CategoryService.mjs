@@ -1,7 +1,7 @@
 import { Category } from "./Category.mjs";
 
 export class CategoryService {
-    static categories = [];
+    static categories = [new Category(2,"drinks")];
     // this function is already made from the last branch due to the need of it 
     static searchBy(column, input) {
         let result = -1;

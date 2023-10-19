@@ -3,6 +3,7 @@ import readline from "readline";
 import { CategoryService } from "./CategoryService.mjs"
 import { SubcategoryService } from "./SubcategoryService.mjs";
 import { ProductService } from "./ProductService.mjs";
+import { DiscountService } from "./DiscountService.mjs";
 
 class UserInterface {
     readl;
@@ -17,7 +18,7 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("Welcome to mall products manegment system (MPMS)");
         console.log("-".repeat(60));
-        this.printOptions("Manage Categories", "Manage Subcategories", "Manage Products", "Manage Offers")
+        this.printOptions("Manage Categories", "Manage Subcategories", "Manage Products", "Manage Discounts")
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
@@ -30,7 +31,7 @@ class UserInterface {
                     this.manageProducts();
                     break;
                 case "4":
-                    this.manageOffers();
+                    this.manageDiscounts();
                     break;
                 case "5":
                     console.log("app is closed");
@@ -100,7 +101,7 @@ class UserInterface {
                     break;
                 default:
                     console.log("please enter a valid number");
-                    this.manageCategories();
+                    this.manageSubcategories();
             }
         })
     }
@@ -136,39 +137,33 @@ class UserInterface {
         })
     }
 
-    manageOffers() {
+    manageDiscounts() {
         console.clear();
         console.log("-".repeat(60));
-        console.log("MPMS--->manage offers");
+        console.log("MPMS--->manage discounts");
         console.log("-".repeat(60));
-        this.printOptions(" get all", "search by", "add new", "edit", "delete", "go back");
+        this.printOptions(" get all", "search by", "add new", "go back");
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    this.getallDiscounts();
                     break;
                 case "2":
-                    console.log("search by");
+                    this.searchForDiscounts();
                     break;
                 case "3":
-                    console.log("add new ");
+                    this.addDiscount();
                     break;
                 case "4":
-                    console.log("edit");
-                    break;
-                case "5":
-                    console.log("delete");
-                    break;
-                case "6":
                     this.mainUI();
                     break;
-                case "7":
+                case "5":
                     console.log("app closed");
                     this.readl.close();
                     break;
                 default:
                     console.log("please enter a valid number");
-                    this.manageCategories();
+                    this.manageDiscounts();
             }
         })
     }
@@ -489,7 +484,7 @@ class UserInterface {
                 searchResult = ProductService.searchBy("producer", answer);
             }
             if (searchResult == -1) {
-                searchResult = SubcategoryService.searchBy("subcategoryID", answer);
+                searchResult = ProductService.searchBy("subcategoryID", answer);
             }
             if (searchResult == -1) {
                 console.log("no results");
@@ -549,6 +544,137 @@ class UserInterface {
                 }
                 setTimeout(() => {
                     this.manageProducts();
+                }, 1000);
+            }
+        });
+    }
+
+    addDiscount() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->add new");
+        console.log("-".repeat(60));
+        this.readl.question("enter the product id : ", productID => {
+            this.readl.question("enter the price : ", price => {
+                this.readl.question("enter the end date : ", endingDate => {
+                    console.log(DiscountService.add(productID, price, endingDate) == -1 ? "adding a discount failed" : "discount has been added");
+                    setTimeout(() => {
+                        this.manageDiscounts();
+                    }, 1000);
+                });
+            });
+        });
+    }
+
+    getallDiscounts() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->get all");
+        console.log("-".repeat(60));
+        let discounts = DiscountService.getAll();
+        if (discounts[0] == null) {
+            console.log("there is no discounts, add some");
+        }
+        else {
+            console.log("id" + (" ".repeat(5)) + "productID" + (" ".repeat(5)) + "price"+ (" ".repeat(5)) + "end date"+ (" ".repeat(5)));
+            console.log("-".repeat(66));
+            discounts.forEach(discount => {
+                console.log(`${discount.id}${" ".repeat(10)}${discount.productID} ${" ".repeat(10)} ${discount.price}${" ".repeat(5)}${discount.endingDate}`);
+            });
+        }
+        console.log("-".repeat(66));
+        this.readl.question("to see any discount info or modify it  enter its id ,to go back enter <back> : ", answer => {
+            if (answer == "back") {
+                this.manageDiscounts();
+            } else {
+                let discountIndex = -1;
+                discounts.map((discount, currentIndex) => {
+                    if (discount.id == answer) {
+                        discountIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (discountIndex == -1) {
+                    console.log("discount not found");
+                    setTimeout(() => {
+                        this.getallDiscounts();
+                    }, 1000)
+                } else {
+                    this.modifyDiscount(discountIndex);
+                }
+            }
+        });
+    }
+    
+    searchForDiscounts() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the id, product id ,price or ending date  for the discount you want to search for : ", (answer) => {
+            let searchResult = DiscountService.searchBy("productID", answer);
+            if (searchResult == -1) {
+                searchResult = DiscountService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = DiscountService.searchBy("price", answer);
+            }
+            if (searchResult == -1) {
+                searchResult = DiscountService.searchBy("endingDate", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("discount id : " + searchResult.discount.id);
+                console.log("discount product id  : " + searchResult.discount.productID);
+                console.log("discount price : " + searchResult.discount.price);
+                console.log("discount ending date price : " + searchResult.discount.endingDate);
+            }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ", (answer) => {
+                this.manageDiscounts();
+            });
+        })
+    }
+
+    modifyDiscount(discountIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->get all-->modify discount");
+        console.log("-".repeat(60));
+        let discount = DiscountService.discounts[discountIndex];
+        console.log("discount id : " + discount.id);
+        console.log("discount product id : " + discount.productID);
+        console.log("discount price : " + discount.price);
+        console.log("discount producer  : " + discount.producer);
+        console.log("discount ending data  : " + discount.endingDate);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ", modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the column name you want to edit  : ", columnName => {
+                    this.readl.question("enter the value  you want to edit to: ", newValue => {
+                        if (typeof columnName === "string" && columnName != "" && newValue != "") {
+                            let result = DiscountService.edit(discount.id,columnName,newValue);
+                            console.log(result == -1 ? "edit failed" : "edit successeded");
+                            setTimeout(() => {
+                                this.getallDiscounts();
+                            }, 1000)
+                        } else {
+                            console.log("please enter a valid data");
+                            setTimeout(() => {
+                                this.modifyDiscount(discountIndex);
+                            }, 1000)
+                        }
+                    })
+                });
+            } else if (modifyType == 2) {
+                let result = DiscountService.delete(discount.id);
+                if (result == -1) {
+                    console.log("delete failed");
+                } else {
+                    console.log("delete successeded");
+                }
+                setTimeout(() => {
+                    this.manageDiscounts();
                 }, 1000);
             }
         });

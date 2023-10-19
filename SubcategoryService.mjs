@@ -2,7 +2,7 @@ import { CategoryService } from "./CategoryService.mjs";
 import { Subcategory } from "./Subcategory.mjs";
 
 export class SubcategoryService {
-    static subcategories = [];
+    static subcategories = [new Subcategory(2,2,"juice")];
     static getAll() {
         return this.subcategories;
     }

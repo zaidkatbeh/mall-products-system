@@ -2,7 +2,7 @@ import { SubcategoryService } from "./SubcategoryService.mjs";
 import { Product } from "./product.mjs";
 
 export class ProductService {
-    static products = [];
+    static products = [new Product(2, "sun top" ,2, "jonaidi", 100, 0.5, 1 )];
 
     static getAll() {
         return this.products;

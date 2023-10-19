@@ -2,7 +2,7 @@ import { Discount } from "./Discount.mjs";
 import { ProductService } from "./ProductService.mjs";
 
 export class DiscountService {
-    static discounts = [];
+    static discounts = [new Discount(2, 2, 0.8, "20,02,2024")];
 
     static getAll() {
         return this.discounts;
@@ -29,8 +29,8 @@ export class DiscountService {
         return maxID;
     }
 
-    static add(productID, price, endData) {
-        if (Number.isNaN(+productID) || Number.isNaN(+price) || !endData.match(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)) {
+    static add(productID, price, endingDate) {
+        if (Number.isNaN(+productID) || Number.isNaN(+price) || !endingDate.match(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)) {
             return -1;
         }
 
@@ -44,7 +44,7 @@ export class DiscountService {
                 this.discounts.splice(currentIndex, 1);
             }
         });
-        this.discounts.push(new Discount(this.getLastID() + 1, productID, price, endData));
+        this.discounts.push(new Discount(this.getLastID() + 1, productID, price, endingDate));
         return 1;
     }
 
@@ -62,7 +62,7 @@ export class DiscountService {
     }
 
     static edit(id, column, newValue) {
-        if (typeof id != "number" || id < 1 || (column != "price" && column != "endingData")|| (column == "price" && Number.isNaN(newValue) || (column == "endData" && !newValue.match(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)))) {
+        if (typeof id != "number" || id < 1 || (column != "price" && column != "endingDate")|| (column == "price" && Number.isNaN(newValue) || (column == "endingDate" && !newValue.match(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)))) {
             return -1;
         }
         let discountIndex = this.searchBy("id", id);
