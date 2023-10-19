@@ -64,4 +64,39 @@ export class ProductService {
         }
         return (this.products.splice(product.index, 1)) ? 1 : -1;
     }
+
+    
+    static edit(id, column, newValue) {
+        if (typeof id != "number" || id < 1 || typeof newValue != "string" || column == "id" || column == "categoryID") {
+            return -1;
+        }
+        let productIndex = this.searchBy("id",id).index;
+        if (productIndex == -1) {
+            console.log("product not found");
+            return -1;
+        }
+        // a variable to check if there is already a product with the same name, subcategory id and producer
+        let doesCopyExists = -1;
+        console.log(`product index is ${productIndex}`);
+        if (column == "name") {
+            this.products.map((product) => {
+                if(product.id != id && product.name == newValue && product.producer == this.products[productIndex].producer && product.subcategoryID == this.products[productIndex].subcategoryID) {
+                    doesCopyExists = 1;
+                }
+            });
+        } else if(column == "producer") {
+            this.products.map((product) => {
+                if(product.id != id && product.name == this.products[productIndex].name && product.producer == newValue && this.products[productIndex].subcategoryID == product.subcategoryID) {
+                    doesCopyExists = 1;
+                }
+            });
+        }
+        if (doesCopyExists == -1) {
+            this.products[productIndex][column] = newValue;
+            return 1;
+        } else {
+            console.log("2 products cannot have the same name, producer and subcategory id");
+            return -1;
+        }
+    }
 }
