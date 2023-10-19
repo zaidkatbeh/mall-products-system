@@ -21,9 +21,10 @@ export class DiscountService {
 
     static getLastID() {
         let maxID = 1;
+
         this.discounts.map((discount) => {
             if (discount.id > maxID) {
-                maxID = discount.id
+                maxID = discount.id;
             }
         });
         return maxID;
@@ -73,6 +74,5 @@ export class DiscountService {
 
         this.discounts[discountIndex.index][column] = newValue;
         return 1;
-
-        }
+    }
 }

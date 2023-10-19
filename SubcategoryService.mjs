@@ -2,10 +2,11 @@ import { CategoryService } from "./CategoryService.mjs";
 import { Subcategory } from "./Subcategory.mjs";
 
 export class SubcategoryService {
-    static subcategories = [new Subcategory(2,2,"juice")];
+    static subcategories = [new Subcategory(2, 2, "juice")];
     static getAll() {
         return this.subcategories;
     }
+
     static getLastID() {
         let maxID = 1;
         this.subcategories.map((subcategory) => {
@@ -16,6 +17,7 @@ export class SubcategoryService {
         return maxID;
 
     }
+
     static searchBy(column, input) {
         let result = -1;
         this.subcategories.find((subcategory, currentIndex) => {
@@ -26,11 +28,12 @@ export class SubcategoryService {
         })
         return result;
     }
+
     static add(categoryID, name) {
-        if(typeof +categoryID != "number" || typeof name != "string") {
+        if (typeof +categoryID != "number" || typeof name != "string") {
             return -1;
         }
-        if (CategoryService.searchBy("id",categoryID) == -1) {
+        if (CategoryService.searchBy("id", categoryID) == -1) {
             console.log("there is no category with this id");
             return -1;
         }
@@ -48,19 +51,21 @@ export class SubcategoryService {
         this.subcategories.push(new Subcategory(this.getLastID() + 1, categoryID, name));
         return 1;
     }
+    
     static delete(id) {
         if (typeof id != "number" || id < 1) {
             return -1;
         }
         let subcategory = this.searchBy("id", id);
-        if(subcategory == -1) {
+        if (subcategory == -1) {
             console.log("subcategory not found");
             return -1;
         }
         this.subcategories.splice(subcategory.index, 1);
         return 1;
     }
-    static edit(id,newName) {
+    
+    static edit(id, newName) {
         let subcategoryIndex = this.searchBy("id", id);
         if (subcategoryIndex == -1) {
             console.log("subcategory not found");
