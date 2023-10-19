@@ -48,8 +48,8 @@ export class CategoryService {
         return (this.categories.splice(category.index, 1)) ? 1 : -1
     }
     static edit(id,newName) {
-        let CategoryIndex = this.searchBy("id",id);
-        if(CategoryIndex == -1) {
+        let categoryIndex = this.searchBy("id",id);
+        if(categoryIndex == -1) {
             console.log("category not found");
             return -1;
         }
@@ -60,7 +60,7 @@ export class CategoryService {
             }
         });
         if(isNameUsed == -1) {
-            this.categories[CategoryIndex.index].name = newName;
+            this.categories[categoryIndex.index].name = newName;
             return 1;
         } else {
             console.log("name already used");
