@@ -5,10 +5,10 @@ export class Discount {
     startingData;
     endingData;
 
-    constructor(id,productID,price,startingData,endingData) {
+    constructor(id,productID,price,endingData) {
+        this.id = id;
         this.productID = productID;
         this.price = price;
-        this.startingData = startingData;
         this.endingData = endingData;
     }
 }
