@@ -2,7 +2,6 @@ export class Discount {
     id;
     productID;
     price
-    startingData;
     endingData;
 
     constructor(id,productID,price,endingData) {
