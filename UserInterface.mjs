@@ -605,10 +605,7 @@ class UserInterface {
             }
         });
     }
-
-    modifyDiscount() {
-    }
-
+    
     searchForDiscounts() {
         console.clear();
         console.log("-".repeat(60));
@@ -638,6 +635,49 @@ class UserInterface {
                 this.manageDiscounts();
             });
         })
+    }
+
+    modifyDiscount(discountIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage discounts--->get all-->modify discount");
+        console.log("-".repeat(60));
+        let discount = DiscountService.discounts[discountIndex];
+        console.log("discount id : " + discount.id);
+        console.log("discount product id : " + discount.productID);
+        console.log("discount price : " + discount.price);
+        console.log("discount producer  : " + discount.producer);
+        console.log("discount ending data  : " + discount.endingDate);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ", modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the column name you want to edit  : ", columnName => {
+                    this.readl.question("enter the value  you want to edit to: ", newValue => {
+                        if (typeof columnName === "string" && columnName != "" && newValue != "") {
+                            let result = DiscountService.edit(discount.id,columnName,newValue);
+                            console.log(result == -1 ? "edit failed" : "edit successeded");
+                            setTimeout(() => {
+                                this.getallDiscounts();
+                            }, 1000)
+                        } else {
+                            console.log("please enter a valid data");
+                            setTimeout(() => {
+                                this.modifyDiscount(discountIndex);
+                            }, 1000)
+                        }
+                    })
+                });
+            } else if (modifyType == 2) {
+                let result = DiscountService.delete(discount.id);
+                if (result == -1) {
+                    console.log("delete failed");
+                } else {
+                    console.log("delete successeded");
+                }
+                setTimeout(() => {
+                    this.manageDiscounts();
+                }, 1000);
+            }
+        });
     }
 }
 let userInterface = new UserInterface();
