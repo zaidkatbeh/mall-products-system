@@ -1,6 +1,7 @@
 import readline from "readline";
 
 import { CategoryService } from "./CategoryService.mjs"
+import { SubcategoryService } from "./SubcategoryService.mjs";
 
 class UserInterface {
     readl;
@@ -77,28 +78,22 @@ class UserInterface {
         console.log("-".repeat(60));
         console.log("MPMS--->manage subcategories");
         console.log("-".repeat(60));
-        this.printOptions(" get all", "search by", "add new", "edit", "delete", "go back");
+        this.printOptions("get all", "search by", "add new", "go back");
         this.readl.question("enter the number of the procces you want to do? ", (answer) => {
             switch (answer) {
                 case "1":
-                    console.log("get all");
+                    this.getallSubcategories();
                     break;
                 case "2":
-                    console.log("search by");
+                    this.searchForSubcategory();
                     break;
                 case "3":
-                    console.log("add new ");
+                    this.addSubcategory();
                     break;
                 case "4":
-                    console.log("edit");
-                    break;
-                case "5":
-                    console.log("delete");
-                    break;
-                case "6":
                     this.mainUI();
                     break;
-                case "7":
+                case "5":
                     console.log("app closed");
                     this.readl.close();
                     break;
@@ -260,6 +255,11 @@ class UserInterface {
                 console.log("Category id : " + searchResult.category.id);
                 console.log("Category name : " + searchResult.category.name);
             }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ",(answer) => {
+                this.manageSubcategories();
+            });
+
         })
     }
     modifyCategory(categoryIndex) {
@@ -297,8 +297,123 @@ class UserInterface {
             },1000);
         }
         });
+    }
 
+    addSubcategory() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->add new");
+        console.log("-".repeat(60));
+        this.readl.question("enter the category id : ", categoryID => {
+            this.readl.question("enter the subcategory name : ",subcategoryName => {
+                console.log(SubcategoryService.add(categoryID,subcategoryName) == -1 ? "adding a subcategory failed" : "subcategory has been added");
+                    setTimeout(() => {
+                        this.manageSubcategories();
+                    },1000)
+            });
+        });
+    }
+    
+    getallSubcategories() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->get all");
+        console.log("-".repeat(60));
+        let Subcategories = SubcategoryService.getAll();
+        if (Subcategories[0] == null) {
+            console.log("there is no subcategories, add some");
+        }
+        else {
+            console.log("id" + (" ".repeat(5))  + "categoryID" + (" ".repeat(5)) + "name");
+            console.log("-".repeat(26));
+            Subcategories.forEach(Subcategory => {
+                let space = 22 - ("" + Subcategory.id).length;
+                console.log(`${Subcategory.id}${" ".repeat(space / 2)}${Subcategory.categoryID}${" ".repeat(space / 2)}${Subcategory.name}`);
+            });
+        }
+        console.log("-".repeat(30));
+        this.readl.question("to see any category info or modify it  enter its id ,to go back enter <back> : ",answer => {
+            if (answer == "back") {
+                this.manageSubcategories();
+            } else {
+                let subcategoryIndex = -1;
+                Subcategories.map((subcategory,currentIndex) => {
+                    if(subcategory.id == answer) {
+                        subcategoryIndex = currentIndex;
+                        return;
+                    }
+                });
+                if (subcategoryIndex == -1){
+                    console.log("category not found");
+                    setTimeout(() => {
+                        this.getAllCategories();
+                    },1000)
+                } else {
+                    this.modifySubcategory(subcategoryIndex);
+                }
+            }
+        });
+    }
 
+    searchForSubcategory() {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->search");
+        console.log("-".repeat(60));
+        this.readl.question("enter the name or the id for the subcategory you want to search for : ", (answer) => {
+            let searchResult = SubcategoryService.searchBy("name", answer);
+            if (searchResult == -1) {
+                searchResult = SubcategoryService.searchBy("id", answer);
+            }
+            if (searchResult == -1) {
+                console.log("no results");
+            } else {
+                console.log("Subcategory id : " + searchResult.subcategory.id);
+                console.log("Subcategory name : " + searchResult.subcategory.name);
+            }
+            console.log("-".repeat(30));
+            this.readl.question("to go back enter anything : ",(answer) => {
+                this.manageSubcategories();
+            });
+
+        })
+    }
+
+    modifySubcategory(subcategoryIndex) {
+        console.clear();
+        console.log("-".repeat(60));
+        console.log("MPMS--->manage subcategories--->get all-->modify subcategory");
+        console.log("-".repeat(60));
+        let subcategory = SubcategoryService.subcategories[subcategoryIndex];
+        console.log(`category name : ${subcategory.name}`);
+        this.readl.question("if you want to edit enter 1 , if you want to delete enter 2 : ",modifyType => {
+            if (modifyType == 1) {
+                this.readl.question("enter the new name : ",answer => {
+                    if(typeof answer === "string" && answer != "") {
+                        let result = SubcategoryService.edit(subcategory.id, answer);
+                        console.log(result == -1 ? "edit failed" : "edit successeded");
+                        setTimeout(() => {
+                            this.getallSubcategories();
+                        },1000)
+                    } else {
+                        console.log("please enter a valid name");
+                        setTimeout(() => {
+                            this.modifyCategory(subcategoryIndex);
+                        },1000)
+                    }
+                });
+            } else if (modifyType == 2) {
+               let result = SubcategoryService.delete(subcategory.id);
+               if (result == -1) {
+                console.log("delete failed");
+               } else {
+                console.log("delete successeded");
+               }
+               setTimeout(() => {
+                this.manageSubcategories();
+            },1000);
+        }
+        });
     }
 }
 let userInterface = new UserInterface();

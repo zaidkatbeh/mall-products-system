@@ -27,7 +27,7 @@ export class SubcategoryService {
         return result;
     }
     static add(categoryID, name) {
-        if(typeof categoryID != "number" || typeof name != "string") {
+        if(typeof +categoryID != "number" || typeof name != "string") {
             return -1;
         }
         if (CategoryService.searchBy("id",categoryID) == -1) {
